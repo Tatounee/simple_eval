@@ -1,3 +1,7 @@
+
+// It dedup what kind of element you want (e.g. all 0 in a vec of u32) for n time add replace these duplicate element by what you want.
+// ex : same = 0, to = 9, occurence = 2
+//      [0, 0, 0, 1] => [9, 0, 1]
 pub trait DedupReplaceFor{
     type Item;
     

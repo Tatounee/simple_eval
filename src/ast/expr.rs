@@ -14,12 +14,35 @@ pub enum Expr {
     Const(Const),
     Function(Box<Function>),
 }
+
+impl Eval for Expr {
+    fn eval(&self) -> f64 {
+        match self {
+            Self::Node(node) => node.eval(),
+            Self::Number(n) => *n,
+            Self::Const(c) => c.eval(),
+            Self::Function(fnc) => fnc.eval()
+        }
+    }
+}
+
 #[derive(Debug, PartialEq)]
 pub enum Const {
     Pi,
     E,
     Inf,
 }
+
+impl Eval for Const {
+    fn eval(&self) -> f64 {
+        match self {
+            Self::Pi => std::f64::consts::PI,
+            Self::E => std::f64::consts::E,
+            Self::Inf => f64::INFINITY
+        }
+    }
+}
+
 impl str::FromStr for Expr {
     type Err = Error;
 

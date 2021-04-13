@@ -1,14 +1,13 @@
-
 use std::str::FromStr;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Operator {
-    Add, //  +
-    Sub, //  -
-    Mul, //  *
-    Div, //  /
-    Pow, //  ^
-    Mod, //  %
+    Add,  //  +
+    Sub,  //  -
+    Mul,  //  *
+    Div,  //  /
+    Pow,  //  ^
+    Mod,  //  %
     FDiv, //  //
 }
 
@@ -24,7 +23,10 @@ impl FromStr for Operator {
             "^" => Ok(Self::Pow),
             "%" => Ok(Self::Mod),
             "//" | "~" => Ok(Self::FDiv),
-            _ => Err(format!("Try to create an Operator from an unkwon &str : `{}`", s))
+            _ => Err(format!(
+                "Try to create an Operator from an unkwon &str : `{}`",
+                s
+            )),
         }
     }
 }

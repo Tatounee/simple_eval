@@ -16,7 +16,7 @@ const OTHER_VALID_CHARS: &[char] = &['(', ')', '.', ',', ' '];
 
 pub type Calculation = Vec<Token>;
 
-trait Tokenize {
+pub trait Tokenize {
     type Err;
     fn tokenize(&self) -> Result<Calculation, Self::Err>;
 }
@@ -205,14 +205,14 @@ enum BufferType {
 #[macro_export]
 macro_rules! token {
     ($tk_kind:ident $( ( $($enum_data:expr),* ) )?, $span:expr) => {
-        Token {
-            token_kind: TokenKind::$tk_kind$( ( $($enum_data)* ) )?,
+        crate::ast::token::Token {
+            token_kind: crate::ast::token::TokenKind::$tk_kind$( ( $($enum_data)* ) )?,
             span: $span
         }
     };
     (Op::$op_kind:ident, $span:expr) => {
-        Token {
-            token_kind: TokenKind::Op(Operator::$op_kind),
+        crate::ast::token::Token {
+            token_kind: crate::ast::token::TokenKind::Op(Operator::$op_kind),
             span: $span
         }
     }

@@ -114,16 +114,21 @@ impl Parsable for Calculation {
 }
 
 
-#[test]
-#[ignore]
-fn parse_add() {
-    let expr: Expr = "2 + 3".parse().unwrap();
-    assert_eq!(
-        expr,
-        Expr::Node(Box::new(TreeNode {
-            l_expr: Expr::Number(2.),
-            op: Operator::Add,
-            r_expr: Expr::Number(3.)
-        }))
-    )
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn pre_parse_add() {
+        let calculation = "2 + 3".tokenize().unwrap();
+        let parsable = calculation.pre_parse().unwrap();
+        assert_eq!(
+            parsable,
+            vec![
+                token!(Number(2.), 0),
+                token!(Op::Add, 2),
+                token!(Number(3.), 4)
+            ]
+        );
+    }
 }

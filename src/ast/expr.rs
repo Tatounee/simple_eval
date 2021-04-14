@@ -26,20 +26,7 @@ impl Eval for Expr {
     }
 }
 
-#[derive(Debug, PartialEq)]
-pub enum Const {
-    Pi,
-    E,
-    Inf,
-}
 
-impl Eval for Const {
-    fn eval(&self) -> f64 {
-        match self {
-            Self::Pi => std::f64::consts::PI,
-            Self::E => std::f64::consts::E,
-            Self::Inf => f64::INFINITY
-        }
     }
 }
 

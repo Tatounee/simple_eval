@@ -3,11 +3,19 @@ use std::collections::VecDeque;
 
 use crate::ast::{
     expr::Expr,
-    function::Function,
+    function::{
+        Function,
+    },
     tree::TreeNode
 };
+use crate::token;
 
-use crate::ast::token::{Calculation, TokenKind, operator::Operator};
+use crate::ast::token::{
+    Calculation,
+    TokenKind,
+    Tokenize,
+    operator::Operator
+};
 use crate::maph_error::{Error, ErrorKinds};
 
 pub trait Parse {

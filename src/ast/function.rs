@@ -2,6 +2,8 @@
 use crate::eval::Eval;
 use super::expr::Expr;
 
+pub const FUNCTION_NAME: &[&str] = &["sqrt", "cbrq", "abs", "sin", "cos", "tan", "asin", "acos", "atan", "ln", "log", "logb", "round", "floor", "ceil", "trunc", "frac", "deg", "rad"];
+
 #[derive(Debug, PartialEq)]
 pub enum Function {
     Sqrt(Expr),

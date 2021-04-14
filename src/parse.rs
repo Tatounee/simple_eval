@@ -5,6 +5,7 @@ use crate::ast::{
     expr::Expr,
     function::{
         Function,
+        FUNCTION_NAME
     },
     tree::TreeNode
 };
@@ -27,6 +28,8 @@ pub trait Parse {
     fn verify_scoping(&self) -> Result<(), Self::Err>;
     fn verify_operator(&self) -> Result<(), Self::Err>;
     fn concat_minus_and_number(&mut self);
+    fn verify_fonction_name(&self) -> Result<(), Self::Err>;
+
     fn parse(self) -> Result<Self::Output, Self::Err>;
 }
 
@@ -45,11 +48,17 @@ impl Parse for Calculation {
         }
 
         self.concat_minus_and_number();
+
         match self.verify_operator() {
             Err(mut e) => errors.append(&mut e),
             Ok(_) => {}
         }
-        
+
+        match self.verify_fonction_name() {
+            Err(mut e) => errors.append(&mut e),
+            Ok(_) => {}
+        }
+
         if !errors.is_empty() {
             Err(errors)
         } else {
@@ -121,6 +130,27 @@ impl Parse for Calculation {
         for i in sub_index.into_iter() {
             self.remove(i);
         }
+    }
+
+    fn verify_fonction_name(&self) -> Result<(), Self::Err> {
+        let mut errors = vec![];
+        for tk in self {
+            match &tk.token_kind {
+                TokenKind::Ident(name) if !FUNCTION_NAME.contains(&name.as_str()) || FUNCTION_NAME.contains(&name.to_lowercase().as_str()) => {
+                    errors.push(Error::new(ErrorKinds::UnknowFonction(name.clone()), vec![tk.span]))
+                }
+                _ => {}
+            }
+        }
+        if !errors.is_empty() {
+            Err(errors)
+        } else {
+            Ok(())
+        }
+    }
+
+    fn parse(self) -> Result<Self::Output, Self::Err> {
+        todo!("Parse");
     }
 }
 

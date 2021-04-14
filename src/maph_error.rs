@@ -26,5 +26,10 @@ pub enum ErrorKinds {
     UnknowOperator(String),
     UnclosedBrack,
     UnexeptedBrack,
-    UnexeptedOperator(Operator)
+    UnexeptedOperator(Operator),
+    DivisionByZero,
+    ModuloByZero,
+    NegativeSqrt,
+    NotInRange(f64, f64),
+    UnknowFonction(String)
 }

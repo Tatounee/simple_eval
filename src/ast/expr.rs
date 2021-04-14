@@ -1,5 +1,5 @@
 
-use std::str;
+use std::str::FromStr;
 
 use crate::eval::Eval;
 
@@ -26,11 +26,11 @@ impl Eval for Expr {
     }
 }
 
+impl FromStr for Expr {
 
     }
 }
 
-impl str::FromStr for Expr {
     type Err = Error;
 
     fn from_str(_: &str) -> Result<Self, Self::Err> {

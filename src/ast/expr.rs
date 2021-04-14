@@ -3,29 +3,19 @@ use std::str::FromStr;
 
 use crate::eval::Eval;
 use crate::maph_error::Error;
+use crate::parse::Parse;
 
 use super::tree::TreeNode;
 use super::function::Function;
-use super::token::operator::Operator;
 use super::token::Tokenize;
+use super::consts::Const;
 
 #[derive(Debug, PartialEq)]
 pub enum Expr {
     Node(Box<TreeNode>),
-    Number(f64),
+    Number(f64, usize),
     Const(Const),
     Function(Box<Function>),
-}
-
-impl Eval for Expr {
-    fn eval(&self) -> f64 {
-        match self {
-            Self::Node(node) => node.eval(),
-            Self::Number(n) => *n,
-            Self::Const(c) => c.eval(),
-            Self::Function(fnc) => fnc.eval()
-        }
-    }
 }
 
 impl FromStr for Expr {
@@ -38,8 +28,17 @@ impl FromStr for Expr {
     }
 }
 
+impl Eval for Expr {
+    type Output = (f64, usize);
     type Err = Error;
 
+    fn eval(&self) -> Result<Self::Output, Self::Err> {
+        match self {
+            Self::Node(node) => node.eval(),
+            Self::Number(n, span) => Ok((*n, *span)),
+            Self::Const(c) => c.eval(),
+            Self::Function(fnc) => fnc.eval()
+        }
     }
 }
 

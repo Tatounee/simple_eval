@@ -1,5 +1,10 @@
 
 use crate::eval::Eval;
+use crate::maph_error::{
+    Error,
+    ErrorKinds
+};
+
 use super::expr::Expr;
 use super::token::operator::Operator;
 
@@ -11,30 +16,39 @@ pub struct TreeNode {
 }
 
 impl Eval for TreeNode {
-    fn eval(&self) -> f64 {
-        let l_number: f64 = self.l_expr.eval();
-        let r_number: f64 = self.r_expr.eval();
+    type Output = (f64, usize);
+    type Err = Error;
+
+    fn eval(&self) -> Result<Self::Output, Self::Err> {
+        let l_number = self.l_expr.eval()?;
+        let r_number = self.r_expr.eval()?;
         match self.op {
             Operator::Add => {
-                l_number + r_number
+                Ok((l_number.0 + r_number.0, l_number.1))
             }
             Operator::Sub => {
-                l_number - r_number
+                Ok((l_number.0 - r_number.0, l_number.1))
             }
             Operator::Mul => {
-                l_number * r_number
+                Ok((l_number.0 * r_number.0, l_number.1))
             }
             Operator::Div => {
-                l_number / r_number
+                if r_number.0 == 0. {
+                    return Err(Error::new(ErrorKinds::DivisionByZero, vec![r_number.1]));
+                }
+                Ok((l_number.0 / r_number.0, l_number.1))
             }
             Operator::Pow => {
-                l_number.powf(r_number)
+                Ok((l_number.0.powf(r_number.0), l_number.1))
             }
             Operator::Mod => {
-                l_number.rem_euclid(r_number)
+                Ok((l_number.0.rem_euclid(r_number.0), l_number.1))
             }
             Operator::FDiv => {
-                (l_number / r_number).trunc()
+                if r_number.0 == 0. {
+                    return Err(Error::new(ErrorKinds::ModuloByZero, vec![r_number.1]));
+                }
+                Ok(((l_number.0 / r_number.0).trunc(), l_number.1))
             }
         }
     }

@@ -1,5 +1,5 @@
 
-use std::{str::FromStr, usize};
+use std::str::FromStr;
 
 use lazy_static::lazy_static;
 use regex::Regex;

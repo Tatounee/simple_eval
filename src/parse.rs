@@ -12,19 +12,22 @@ use crate::maph_error::{Error, ErrorKinds};
 
 pub trait Parse {
     type Err;
+    type ItSelf;
     type Output;
 
-    fn pre_parse(self) -> Result<Self::Output, Self::Err>;
+    fn pre_parse(self) -> Result<Self::ItSelf, Self::Err>;
     fn verify_scoping(&self) -> Result<(), Self::Err>;
     fn verify_operator(&self) -> Result<(), Self::Err>;
     fn concat_minus_and_number(&mut self);
+    fn parse(self) -> Result<Self::Output, Self::Err>;
 }
 
 impl Parse for Calculation {
     type Err = Vec<Error>;
-    type Output = Self;
+    type ItSelf = Self;
+    type Output = Expr;
 
-    fn pre_parse(mut self) -> Result<Self::Output, Self::Err> {
+    fn pre_parse(mut self) -> Result<Self::ItSelf, Self::Err> {
         
         let mut errors = vec![];
         

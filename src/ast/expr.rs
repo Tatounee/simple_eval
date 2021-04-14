@@ -2,10 +2,12 @@
 use std::str::FromStr;
 
 use crate::eval::Eval;
+use crate::maph_error::Error;
 
 use super::tree::TreeNode;
 use super::function::Function;
 use super::token::operator::Operator;
+use super::token::Tokenize;
 
 #[derive(Debug, PartialEq)]
 pub enum Expr {
@@ -27,19 +29,19 @@ impl Eval for Expr {
 }
 
 impl FromStr for Expr {
+    type Err = Vec<Error>;
 
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let calulation = s.tokenize()?;
+        let parsable = calulation.pre_parse()?;
+        Ok(parsable.parse()?)
     }
 }
 
     type Err = Error;
 
-    fn from_str(_: &str) -> Result<Self, Self::Err> {
-        todo!()
     }
 }
-
-#[derive(Debug)]
-pub enum Error {}
 
 
 #[cfg(test)]

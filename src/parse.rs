@@ -10,7 +10,7 @@ use crate::ast::{
 use crate::ast::token::{Calculation, TokenKind, operator::Operator};
 use crate::maph_error::{Error, ErrorKinds};
 
-trait Parsable {
+pub trait Parse {
     type Err;
     type Output;
 
@@ -20,7 +20,7 @@ trait Parsable {
     fn concat_minus_and_number(&mut self);
 }
 
-impl Parsable for Calculation {
+impl Parse for Calculation {
     type Err = Vec<Error>;
     type Output = Self;
 
